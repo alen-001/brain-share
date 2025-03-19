@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Brain Share
 
-## Getting Started
+Brain Share is a powerful knowledge management platform that enables users to manage a **"second brain" — a collection of documents** with a **wysiwyg editor** featuring document tagging, and full CRUD operations. Users can also **share documents anonymously** with **view-only share link**.
 
-First, run the development server:
+---
 
+### 🚀 Tech Stack
+- **Frontend:** Next.js 15, TypeScript, Tailwind CSS  
+- **Database:** MongoDB  
+- **Authentication:** Clerk  
+- **Editor:** TipTap (Rich Text Editor)  
+
+---
+
+### 🎯 Key Features
+
+✅ **Authentication with Clerk:**  
+Seamless authentication and session management powered by Clerk.
+
+✅ **Rich Text Document Management:**  
+Leverage TipTap's rich text editor to create, format, and maintain documents efficiently.
+
+✅ **Tagging and Organization:**  
+Add tags to documents to enable easy categorization and filtering.
+
+✅ **Search and Filter by Tag:**  
+Quickly search and filter documents using tags or full-text search.
+
+✅ **Full CRUD Operations:**  
+- Create, view, update, and delete documents effortlessly.  
+- Maintain a seamless workflow with intuitive UI/UX.
+
+✅ **Anonymous Document Sharing:**  
+Easily share documents with view-only access via unique links.
+
+---
+
+### 🔮 Future Scope
+
+🚧 **1. Editor Access and Real-Time Collaboration**  
+- Implement collaborative document editing using **Liveblocks** to enable multiple users to work on the same document in real-time.
+
+🧠 **2. AI Autocomplete and Enhanced AI Features**  
+- Add AI-powered autocomplete and other intelligent features to enhance the document creation and editing experience.
+
+---
+
+### 📚 Setup Instructions
+
+1. **Clone the repository:**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-repo/brain-share.git
+cd brain-share
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Install dependencies:**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Set up environment variables:**
+- Configure your `.env` file with required keys:
+```
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
+CLERK_SECRET_KEY=<your-clerk-secret-key>
+MONGODB_URI=<your-mongodb-uri>
+NEXT_PUBLIC_BASE_URL=<your-base-url>
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
 
-## Learn More
+4. **Run the development server:**
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+5. **Open in browser:**
+```
+http://localhost:3000
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🤝 Contributing
+Contributions are welcome! If you encounter issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
