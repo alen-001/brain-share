@@ -37,6 +37,7 @@ interface TipTapEditorProps {
 export interface TipTapEditorRef {
   getHTML: () => string;
   clearContent: () => void;
+  setContent:(content:string)=>void;
 }
 
 const TipTapEditor=forwardRef<TipTapEditorRef, TipTapEditorProps>(
@@ -67,6 +68,7 @@ const TipTapEditor=forwardRef<TipTapEditorRef, TipTapEditorProps>(
   useImperativeHandle(ref, () => ({
     getHTML: () => editor?.getHTML() || "",
     clearContent: () => editor?.commands.clearContent(),
+    setContent: (content) => editor?.commands.setContent(content),
   }));
   if (!editor) {
     return null

@@ -33,10 +33,10 @@ export async function PUT(req:NextRequest, { params }: { params: Promise<{ id: s
 
   await connectDB();
   try {
-    const { title, content } = await req.json();
+    const { title, content,description,tags } = await req.json();
     const updatedDoc = await Doc.findOneAndUpdate(
       { _id: id, userId },
-      { title, content },
+      { title, content ,description:description?description:"",tags:tags?tags:[]},
       { new: true }
     );
     if (!updatedDoc) {

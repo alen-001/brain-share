@@ -9,87 +9,85 @@ import Link from "next/link"
 import TipTapEditor,{TipTapEditorRef} from "@/components/tiptap-editor"
 import { toast } from "sonner"
 import EditDocumentModal from "@/components/edit-document-modal"
-import { DocType } from "@/doc.types"
+import { DocType, transformFetchedDoc } from "@/doc.types"
+import { useAuth } from "@clerk/nextjs"
 import { set } from "mongoose"
-
+import axios from "axios"
+import parse from "html-react-parser";
 // Mock data for documents - expanded with description and tags
-const documents: DocType[] = [
-  {
-    id: "1",
-    title: "Project Proposal",
-    updatedAt: "2023-11-10T14:30:00Z",
-    content:
-      "<h2>Project Proposal</h2><p>This is a detailed project proposal for our new initiative.</p><p>The project aims to revolutionize how we approach document management by introducing a seamless, intuitive interface that makes creating and editing documents a breeze.</p><h3>Key Features</h3><ul><li>Real-time collaboration</li><li>Version history</li><li>Smart formatting</li><li>Cloud synchronization</li></ul><p>By implementing these features, we expect to see a 30% increase in team productivity and a significant reduction in document-related confusion.</p>",
-    description: "A comprehensive proposal for our new project initiative",
-    tags: ["project", "planning", "proposal"],
-  },
-  {
-    id: "2",
-    title: "Meeting Notes",
-    updatedAt: "2023-11-09T10:15:00Z",
-    content:
-      "<h2>Team Meeting Notes</h2><p>Notes from our weekly team meeting discussing project progress.</p><h3>Attendees</h3><ul><li>John Smith</li><li>Sarah Johnson</li><li>Michael Brown</li><li>Emily Davis</li></ul><h3>Discussion Points</h3><ol><li>Project timeline review</li><li>Budget allocation</li><li>Resource distribution</li><li>Next steps</li></ol><p>The team agreed to accelerate the development phase to meet the upcoming deadline. Additional resources will be allocated to the frontend team.</p>",
-    description: "Notes from our weekly team meeting on project progress",
-    tags: ["meeting", "notes", "team"],
-  },
-  {
-    id: "3",
-    title: "Research Findings",
-    updatedAt: "2023-11-08T16:45:00Z",
-    content:
-      "<h2>Research Findings</h2><p>Our research findings show interesting patterns in user behavior.</p><p>After analyzing data from over 1,000 users, we've identified several key insights that will inform our product development strategy.</p><h3>Key Insights</h3><ul><li>Users spend an average of 15 minutes per session</li><li>The most used feature is document sharing</li><li>Mobile usage has increased by 45% since last quarter</li><li>User retention is highest among those who use tags</li></ul><p>These findings suggest we should focus on enhancing our mobile experience and expanding our tagging system to improve user engagement.</p>",
-    description: "Analysis of recent user behavior patterns and insights",
-    tags: ["research", "analysis", "data"],
-  },
-]
-
 export default function DocumentPage({ params }: { params: { id: string } }) {
   const router = useRouter()
+  const {getToken}=useAuth()
   const editorRef = useRef<TipTapEditorRef>(null);
   const [currentDoc, setCurrentDoc] = useState<DocType>({id:"",title:"",updatedAt:"",content:"",description:"",tags:[]});
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [tags, setTags] = useState<string[]>([])
   const [content, setContent] = useState("")
   const [isSaving, setIsSaving] = useState(false)
-  const isNewDocument = params.id === "new"
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  // useEffect(()=>{
-  //   const 
-  // })
-  // useEffect(() => {
-  //   if (!isNewDocument) {
-  //     const doc = documents.find((doc) => doc.id === params.id)
-  //     if (doc) {
-  //       setCurrentDoc(doc)
-  //     } else {
-  //       // Document not found, redirect to home
-  //       toast.error("Document not found",{
-  //         description: "The document you are looking for does not exist.",
-  //         className: "bg-red-500 text-white"
-  //       })
-  //       router.push("/home")
-  //     }
-  //   }
-  // }, [params.id, isNewDocument, router, toast])
-
-  const handleSaveMetadata = (updatedDoc: DocType) => {
-    setCurrentDoc(updatedDoc)
-    documents.forEach((doc) => {
-      if (doc.id === updatedDoc.id) {
-        doc.title = updatedDoc.title
-        doc.description = updatedDoc.description
-        doc.tags = updatedDoc.tags
-      }
+  async function getDoc(){
+    try{
+      const token = await getToken();
+      const res = await axios.get(`/api/documents/${params.id}`,{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const data=res.data;
+      return transformFetchedDoc(data);
+    }catch(err){
+      console.error(err);
+      toast.error("Error fetching document",{
+        description: "An error occurred while fetching the document. Please try again later.",})
     }
-    )
-    console.log(documents);
-    // In a real app, this would update the backend
-    toast.success("Document updated",{
-      className: "bg-green-500 "}
-    )
   }
 
+  useEffect( ()=>{
+    getDoc().then((data)=>{
+      if (data) {
+        setCurrentDoc(data);
+        setContent(data.content);
+      } else {
+        toast.error("Document not found", {
+          description: "The document you are looking for does not exist.",
+        });
+        router.push("/home");
+      }
+    })
+  },[params.id])
+  useEffect(() => {
+    if (editorRef.current && content) {
+      editorRef.current.setContent(content);
+    }
+  }, [content]);
+    const handleUpdate = async (document:DocType) => {
+      const {id,title,content,description,tags}=document;
+      // console.log(document);
+      try{
+        const token = await getToken();
+        const res=await axios.put(`/api/documents/${id}`,
+          { title, content,description:description,tags},
+          { headers: { "Content-Type": "application/json"
+          ,Authorization: `Bearer ${token}` } }
+        );
+        if (res.status===200) {
+          const data=res.data;
+          const updatedDoc=transformFetchedDoc(data);
+          setCurrentDoc(updatedDoc);
+        }
+      }catch(err){
+        console.error(err);
+        toast.error("Error updating document",{
+          description: "An error occurred while updating the document. Please try again later."
+        })
+      }
+    }
+    const handleSaveMetadata =async (updatedDoc: Partial<DocType>) => {
+      const newDoc = { ...currentDoc, ...updatedDoc };
+      console.log(newDoc);
+      setCurrentDoc((prev) => ({ ...prev, ...updatedDoc }));
+      console.log("Current doc",currentDoc);
+      setIsEditModalOpen(false);
+    };
+    
   const handleSave = () => {
     if (!currentDoc.title.trim()) {
       toast.error("Title required",{
@@ -98,24 +96,15 @@ export default function DocumentPage({ params }: { params: { id: string } }) {
       })
       return;
     }
-    const editorContent = editorRef.current?.getHTML();
+    // const editorContent = editorRef.current?.getHTML();
+    // setCurrentDoc({...currentDoc,content:editorContent || ""});
     console.log(currentDoc);
-    setCurrentDoc({...currentDoc,content:editorContent || ""});
     setIsSaving(true)
-
-    // Simulate saving to backend
-    // setTimeout(() => {
-    //   setIsSaving(false)
-    //   toast({
-    //     title: "Document saved",
-    //     description: "Your document has been saved successfully.",
-    //   })
-
-    //   if (isNewDocument) {
-    //     // In a real app, we would get the new ID from the backend
-    //     router.push("/home")
-    //   }
-    // }, 100)
+    handleUpdate(currentDoc);
+    setIsSaving(false)
+    toast.success("Document saved",{
+      description: "Your document has been saved successfully."
+    })
   }
 
   const handleShare = () => {
@@ -148,25 +137,28 @@ export default function DocumentPage({ params }: { params: { id: string } }) {
             <Edit className="mr-2 h-4 w-4" />
             Edit Metadata
           </Button>
-          <Button variant="outline" onClick={handleShare} disabled={isNewDocument}>
+          <Button variant="outline" onClick={handleShare} >
             <Share className="mr-2 h-4 w-4" />
             Share
           </Button>
-          <Button onClick={handleSave}>
-            {/* {isSaving ? (
+          <Button onClick={handleSave} disabled={isSaving}>
+            {isSaving ? (
               "Saving..."
             ) : (
-              <> */}
+              <>
                 <Save className="mr-2 h-4 w-4" />
                 Save
-              {/* </>
-            )} */}
+              </>
+            )}
           </Button>
         </div>
       </div>
 
       <div className="border rounded-lg p-4 min-h-[500px] text-white bg-black">
-        <TipTapEditor ref={editorRef} content={content} onChange={(content) => console.log(content)}  />
+        <TipTapEditor ref={editorRef} content={content} onChange={(c) => {console.log(c);
+          setContent(c);
+          setCurrentDoc(prev => ({ ...prev, content: c }))
+          }} />
       </div>
 
       <EditDocumentModal
