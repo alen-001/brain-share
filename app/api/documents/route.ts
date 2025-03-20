@@ -17,7 +17,7 @@ export async function POST(req:NextRequest) {
     await newDoc.save();
     revalidatePath("/documents");
     return NextResponse.json(newDoc, { status: 201 });
-  } catch (error:any) {
-    return NextResponse.json({ error: `Error creating document ${error.message}` }, { status: 500 });
+  } catch (_error) {
+    return NextResponse.json({ error: `Error creating document` }, { status: 500 });
   }
 }

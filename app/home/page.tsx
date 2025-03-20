@@ -1,7 +1,6 @@
 // "use client"
-import { Brain, BrainCircuit, PlusCircle, Waypoints } from "lucide-react"
 import Image from "next/image"
-import { RedirectToSignIn, SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
+import { RedirectToSignIn, SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import DocumentsPage from "@/components/document-page"
 import Link from "next/link"
 export default function Home() {

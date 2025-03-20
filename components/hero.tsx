@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import Image from "next/image";
 export function Hero() {
   return (
     <div className="relative flex h-[40rem] w-full flex-col overflow-hidden rounded-md bg-black/[0.96] antialiased md:items-center md:justify-center">

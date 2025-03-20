@@ -18,7 +18,6 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { X, Plus } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
 import { DocType } from "@/doc.types"
 import axios from "axios"
 import { useAuth } from "@clerk/nextjs"
@@ -35,7 +34,6 @@ export default function EditDocumentModal({ isOpen, onClose, document, onSave }:
   const [tags, setTags] = useState<string[]>(document.tags || [])
   const [newTag, setNewTag] = useState("")
   const {getToken}=useAuth();
-  const router = useRouter()
   useEffect(()=>{
     if(document){
       setDescription(document.description || "")
@@ -46,7 +44,7 @@ export default function EditDocumentModal({ isOpen, onClose, document, onSave }:
     console.log("Hi from modal")
     try{
       const token = await getToken();
-      const res=await axios.put(`/api/documents/${document.id}`,
+      await axios.put(`/api/documents/${document.id}`,
         {description: description, tags: tags },
         {headers: { "Content-Type": "application/json"
         ,Authorization: `Bearer ${token}` } }

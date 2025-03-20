@@ -4,7 +4,7 @@ import Doc from "@/models/doc.model";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
-export async function GET(req:NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req:NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { userId } =await auth();
 
   if (!userId) {
@@ -19,8 +19,8 @@ export async function GET(req:NextRequest, { params }: { params: { id: string } 
       return NextResponse.json({ message: "document not found" }, { status: 404 });
     }
     return NextResponse.json(document, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ error: "Error fetching document" }, { status: 500 });
+  } catch (_error) {
+    return NextResponse.json({ error: `Error fetching document` }, { status: 500 });
   }
 }
 
@@ -44,12 +44,12 @@ export async function PUT(req:NextRequest, { params }: { params: Promise<{ id: s
     }
     revalidatePath("/documents");
     return NextResponse.json(updatedDoc, { status: 200 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Error updating doc" }, { status: 500 });
   }
 }
 
-export async function DELETE(req:NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req:NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { userId } =await auth();
 
   const {id}=await params;
@@ -67,7 +67,7 @@ export async function DELETE(req:NextRequest, { params }: { params: { id: string
     }
 
     return NextResponse.json({ message: "Document deleted successfully" }, { status: 200 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Error deleting Document" }, { status: 500 });
   }
 }

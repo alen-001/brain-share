@@ -2,7 +2,7 @@
 import { useState, useEffect, use } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Edit } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import {toast} from "sonner"
@@ -13,11 +13,9 @@ import { DocType, transformFetchedDoc } from "@/doc.types"
 export default function SharedDocumentViewPage({ params }:{params : Promise<{shareId: string}>}) {
   const router = useRouter()
   const [document, setDocument] = useState<DocType>()
-  const [Loading, setLoading] = useState(true);
   const {shareId}=use(params)
   async function getDoc(){
     try{
-      setLoading(true);
       const res = await axios.get(`/api/share/${shareId}`);
       const data=res.data;
       return transformFetchedDoc(data);
@@ -31,7 +29,6 @@ export default function SharedDocumentViewPage({ params }:{params : Promise<{sha
   useEffect( ()=>{
     getDoc().then((data)=>{
       if (data) {
-        setLoading(false);
         setDocument(data);
       } else {
         toast.error("Document not found", {

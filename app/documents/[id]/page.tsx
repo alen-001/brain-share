@@ -11,9 +11,7 @@ import { toast } from "sonner"
 import EditDocumentModal from "@/components/edit-document-modal"
 import { DocType, transformFetchedDoc } from "@/doc.types"
 import { useAuth } from "@clerk/nextjs"
-import { set } from "mongoose"
 import axios from "axios"
-import parse from "html-react-parser";
 
 export default function DocumentPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()

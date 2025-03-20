@@ -1,7 +1,6 @@
 import React from "react";
-import Link from "next/link";
 import {LinkedInLogoIcon, GitHubLogoIcon} from "@radix-ui/react-icons"
-import Image from "next/image";
+
 
 
 const defaultSocialLinks = [

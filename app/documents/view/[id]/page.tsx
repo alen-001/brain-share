@@ -16,13 +16,11 @@ import { Share } from "lucide-react"
 export default function DocumentViewPage({ params }:{params : Promise<{id: string}>}) {
   const router = useRouter()
   const [document, setDocument] = useState<DocType>()
-  const [Loading, setLoading] = useState(true);
   const {id}=use(params)
   const {getToken}=useAuth()
   async function getDoc(){
     try{
       const token = await getToken();
-      setLoading(true);
       const res = await axios.get(`/api/documents/${id}`,{
         headers:{
           Authorization: `Bearer ${token}`
@@ -40,7 +38,6 @@ export default function DocumentViewPage({ params }:{params : Promise<{id: strin
   useEffect( ()=>{
     getDoc().then((data)=>{
       if (data) {
-        setLoading(false);
         setDocument(data);
       } else {
         toast.error("Document not found", {

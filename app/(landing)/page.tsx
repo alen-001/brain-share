@@ -24,7 +24,7 @@ function LandingPage() {
             <h1 className="text-3xl p-10 bg-opacity-50 bg-gradient-to-b font-mono from-neutral-50 to-neutral-400 bg-clip-text text-center  font-extralight text-transparent">
               Store whatever you want,
               <br/>
-              <div className="text-sm">even if it's your love for dogs</div>
+              <div className="text-sm">even if it&apos;s your love for dogs</div>
             </h1>
           <Image src='/assets/features.png' alt="features" width={4000}  height={4000} className="rounded-3xl"/>
           </div>

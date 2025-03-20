@@ -4,7 +4,6 @@ import { DocType, transformFetchedDoc } from "@/doc.types";
 import { Button } from "@/components/ui/button";
 import { Search, FileText, Trash2, Edit, Share, PlusCircle, Plus } from "lucide-react"
 import { Input } from "@/components/ui/input"; 
-import EditDocumentModal from "@/components/edit-document-modal";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner";
@@ -17,7 +16,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link";
@@ -26,8 +24,6 @@ import axios from "axios";
 export default function DocumentsList({ docs }: { docs: DocType[] }) {
   const router=useRouter();
   const [documents, setDocuments] = useState<DocType[]>(docs);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [documentToDelete, setDocumentToDelete] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -52,8 +48,6 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
       setDocuments((prevDocs) => [...prevDocs, newDoc]);
 
       router.push(`/documents/${newDoc.id}`);
-      setTitle("");
-      setContent("");
     }
   };
   const deleteDocument = () => {
@@ -111,10 +105,7 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
   const shareDocument = (id: string, e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    navigator.clipboard.writeText(`http://${process.env.NEXT_PUBLIC_BASE_URL}/share/${id}`)
-    toast.success("Share link copied",{
-      description: "Document share link has been copied to clipboard."
-    })
+    handleShare(id);
 
   }
   return (

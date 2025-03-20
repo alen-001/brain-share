@@ -12,7 +12,7 @@ export async function GET(req:NextRequest, { params } : { params: Promise<{ shar
         return NextResponse.json({ message: "Document not found" }, { status: 404 });
     }
     return NextResponse.json(doc, { status: 200 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Error fetching shared document" }, { status: 500 });
   }
 }
