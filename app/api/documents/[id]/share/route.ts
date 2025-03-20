@@ -19,7 +19,7 @@ export async function GET(req:NextRequest, { params }: { params: Promise<{ id: s
     }
 
     return NextResponse.json({ shareId: doc.shareId }, { status: 200 });
-  } catch (error:any) {
-    return NextResponse.json({ error: `Error generating share link ${error.message}` }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ error: `Error generating share link` }, { status: 500 });
   }
 }
