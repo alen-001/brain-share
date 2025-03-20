@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { DocType, transformFetchedDoc } from "@/doc.types";
 import { Button } from "@/components/ui/button";
-import { Search, FileText, Trash2, Edit, Share, PlusCircle } from "lucide-react"
+import { Search, FileText, Trash2, Edit, Share, PlusCircle, Plus } from "lucide-react"
 import { Input } from "@/components/ui/input"; 
 import EditDocumentModal from "@/components/edit-document-modal";
 import { useRouter } from "next/navigation";
@@ -50,9 +50,8 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
       const data = await res.json();
       const newDoc=transformFetchedDoc(data);
       setDocuments((prevDocs) => [...prevDocs, newDoc]);
-      console.log(newDoc);
+
       router.push(`/documents/${newDoc.id}`);
-      console.log(documents);
       setTitle("");
       setContent("");
     }
@@ -112,15 +111,11 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
   const shareDocument = (id: string, e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    // In a real app, this would generate a sharing link or open a sharing dialog
     navigator.clipboard.writeText(`http://${process.env.NEXT_PUBLIC_BASE_URL}/share/${id}`)
     toast.success("Share link copied",{
       description: "Document share link has been copied to clipboard."
     })
-    // toast({
-    //   title: "Share link copied",
-    //   description: "Document share link has been copied to clipboard.",
-    // })
+
   }
   return (
     <div className="space-y-6">
@@ -195,6 +190,12 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
                 </CardFooter>
             </Card>
           ))}
+          <Card className="flex items-center justify-center">
+            <Button onClick={handleCreate}>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Add new Document
+          </Button>
+          </Card>
         </div>
       )}
             <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
@@ -211,10 +212,14 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-          <Button onClick={handleCreate}>
+      {/* <button title="Add note" className="absolute right-16 bottom-6 text-black opacity-50 transform -translate-y-1/2 bg-white hover:bg-white hover:scale-150 hover:-translate-x-4  transition duration-200 p-2 rounded-full shadow-md"
+                    onClick={handleCreate}>
+                    <Plus className='w-10 h-10' strokeWidth="1"/>
+                </button> */}
+          {/* <Button onClick={handleCreate}>
             <PlusCircle className="mr-2 h-4 w-4" />
             New Document
-          </Button>
+          </Button> */}
     </div>
   );
 }

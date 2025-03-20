@@ -12,6 +12,7 @@ import DOMPurify from "dompurify";
 import axios from "axios"
 import { DocType, transformFetchedDoc } from "@/doc.types"
 import { useAuth } from "@clerk/nextjs"
+import { Share } from "lucide-react"
 export default function DocumentViewPage({ params }:{params : Promise<{id: string}>}) {
   const router = useRouter()
   const [document, setDocument] = useState<DocType>()
@@ -70,9 +71,6 @@ export default function DocumentViewPage({ params }:{params : Promise<{id: strin
       })
     }
   }
-  const handleOpenEditor = () => {
-    router.push(`/documents/${id}`)
-  }
 
   if (!document) {
     return <div className="container mx-auto py-10">Loading...</div>
@@ -86,12 +84,18 @@ export default function DocumentViewPage({ params }:{params : Promise<{id: strin
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
+        <div className="flex gap-2">
         <Link href={`/documents/${id}`}>
         <Button variant="outline">
           <Edit className="mr-2 h-4 w-4" />
           Edit
         </Button>
         </Link>
+        <Button variant="default" onClick={handleShare} >
+          <Share className="mr-2 h-4 w-4" />
+          Share
+        </Button>
+        </div>
       </div>
 
       <article className="max-w-3xl mx-auto">

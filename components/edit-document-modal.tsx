@@ -31,7 +31,6 @@ interface EditDocumentModalProps {
 }
 
 export default function EditDocumentModal({ isOpen, onClose, document, onSave }: EditDocumentModalProps) {
-  console.log("Hello from modal",document);
   const [description, setDescription] = useState(document.description || "")
   const [tags, setTags] = useState<string[]>(document.tags || [])
   const [newTag, setNewTag] = useState("")
@@ -44,7 +43,7 @@ export default function EditDocumentModal({ isOpen, onClose, document, onSave }:
     }
   },[document])
   const handleSave =async () => {
-    console.log("Hi from modal",description, tags);
+    console.log("Hi from modal")
     try{
       const token = await getToken();
       const res=await axios.put(`/api/documents/${document.id}`,

@@ -14,7 +14,7 @@ import { useAuth } from "@clerk/nextjs"
 import { set } from "mongoose"
 import axios from "axios"
 import parse from "html-react-parser";
-// Mock data for documents - expanded with description and tags
+
 export default function DocumentPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
   const {getToken}=useAuth()
@@ -61,7 +61,6 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
   }, [content]);
     const handleUpdate = async (document:DocType) => {
       const {id,title,content,description,tags}=document;
-      // console.log(document);
       try{
         const token = await getToken();
         const res=await axios.put(`/api/documents/${id}`,
@@ -82,10 +81,8 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
       }
     }
     const handleSaveMetadata =async (updatedDoc: Partial<DocType>) => {
-      const newDoc = { ...currentDoc, ...updatedDoc };
-      console.log(newDoc);
+
       setCurrentDoc((prev) => ({ ...prev, ...updatedDoc }));
-      console.log("Current doc",currentDoc);
       setIsEditModalOpen(false);
     };
     
@@ -99,7 +96,6 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
     }
     // const editorContent = editorRef.current?.getHTML();
     // setCurrentDoc({...currentDoc,content:editorContent || ""});
-    console.log(currentDoc);
     setIsSaving(true)
     handleUpdate(currentDoc);
     setIsSaving(false)
@@ -170,7 +166,7 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
       </div>
 
       <div className="border rounded-lg p-4 min-h-[500px] text-white bg-black">
-        <TipTapEditor ref={editorRef} content={content} onChange={(c) => {console.log(c);
+        <TipTapEditor ref={editorRef} content={content} onChange={(c) => {
           setContent(c);
           setCurrentDoc(prev => ({ ...prev, content: c }))
           }} />
@@ -178,7 +174,7 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
 
       <EditDocumentModal
         isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}// Already in editor
+        onClose={() => setIsEditModalOpen(false)}
         document={currentDoc}
         onSave={handleSaveMetadata}
       />

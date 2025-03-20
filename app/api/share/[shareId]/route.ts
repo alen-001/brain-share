@@ -11,7 +11,6 @@ export async function GET(req:NextRequest, { params } : { params: Promise<{ shar
     if (!doc) {
         return NextResponse.json({ message: "Document not found" }, { status: 404 });
     }
-    console.log(doc);
     return NextResponse.json(doc, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: "Error fetching shared document" }, { status: 500 });

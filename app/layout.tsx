@@ -5,13 +5,12 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Toaster } from "sonner";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
+
 import { DocumentProvider } from "@/context/document-context";
 export const metadata: Metadata = {
   title: "BrainShare",
   description: "Create and share your brain with the world!",
 };
-const queryClient = new QueryClient();
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,7 +20,6 @@ export default function RootLayout({
 
     <html lang="en" suppressHydrationWarning>
       <body>
-      {/* <QueryClientProvider client={queryClient}> */}
       <DocumentProvider>
       <ThemeProvider
     attribute="class"
@@ -44,7 +42,6 @@ export default function RootLayout({
         </ThemeProvider>
         </DocumentProvider>
         <Toaster />
-        {/* </QueryClientProvider> */}
       </body>
     </html>
     
