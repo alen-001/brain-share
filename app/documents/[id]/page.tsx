@@ -167,7 +167,6 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
 
       <div className="border rounded-lg p-4 min-h-[500px] text-white bg-black">
         <TipTapEditor ref={editorRef} content={content} onChange={(c) => {
-          setContent(c);
           setCurrentDoc(prev => ({ ...prev, content: c }))
           }} />
       </div>
