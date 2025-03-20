@@ -1,11 +1,7 @@
 // "use client"
-import { Button } from "@/components/ui/button"
 import { Brain, BrainCircuit, PlusCircle, Waypoints } from "lucide-react"
-import Link from "next/link"
-import DocumentList from "@/components/document-list"
 import Image from "next/image"
 import { RedirectToSignIn, SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
-import DocumentsList from "@/components/doc-list"
 import DocumentsPage from "@/components/document-page"
 export default function Home() {
   return (
@@ -17,8 +13,8 @@ export default function Home() {
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center space-x-4">
           {/* <BrainCircuit className="h-8 w-8" strokeWidth={1}/> */}
-          {/* <Image src="/assets/share.svg" alt="Brain Share" width={30} height={30} className="brightness-200 invert" /> */}
-          <h1 className="text-2xl font-bold font-mono ">Brain Share</h1>
+          <Image src="/assets/share.svg" alt="Brain Share" width={30} height={30} className="brightness-200 invert" />
+          <h1 className="text-2xl font-bold font-mono -mx-2">Brain Share</h1>
         </div>
               <UserButton />
       </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState,useRef } from "react"
+import { useEffect, useState,useRef, use } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,7 +15,7 @@ import { set } from "mongoose"
 import axios from "axios"
 import parse from "html-react-parser";
 // Mock data for documents - expanded with description and tags
-export default function DocumentPage({ params }: { params: { id: string } }) {
+export default function DocumentPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
   const {getToken}=useAuth()
   const editorRef = useRef<TipTapEditorRef>(null);
@@ -23,10 +23,11 @@ export default function DocumentPage({ params }: { params: { id: string } }) {
   const [content, setContent] = useState("")
   const [isSaving, setIsSaving] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const id=use(params).id;
   async function getDoc(){
     try{
       const token = await getToken();
-      const res = await axios.get(`/api/documents/${params.id}`,{
+      const res = await axios.get(`/api/documents/${id}`,{
         headers:{
           Authorization: `Bearer ${token}`
         }
@@ -52,7 +53,7 @@ export default function DocumentPage({ params }: { params: { id: string } }) {
         router.push("/home");
       }
     })
-  },[params.id])
+  },[id])
   useEffect(() => {
     if (editorRef.current && content) {
       editorRef.current.setContent(content);
@@ -107,12 +108,26 @@ export default function DocumentPage({ params }: { params: { id: string } }) {
     })
   }
 
-  const handleShare = () => {
-    // In a real app, this would generate a sharing link or open a sharing dialog
-    navigator.clipboard.writeText(`https://real-docs.example/shared/${params.id}`)
-    toast.success("Share link copied",{
-      description: "Document share link has been copied to clipboard."
-    })
+  const handleShare =async () => {
+    try{
+      const token=await getToken();
+      const res=await axios.get(`/api/documents/${id}/share`,{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const data=res.data;
+      const shareId=data.shareId;
+      navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/documents/view/shared/${shareId}`)
+      toast.success("Share link copied",{
+        description: "Document share link has been copied to clipboard."
+      })
+    }catch(err){
+      console.error(err);
+      toast.error("Error sharing document",{
+        description: "An error occurred while sharing the document. Please try again later."
+      })
+    }
   }
 
   return (
@@ -163,8 +178,7 @@ export default function DocumentPage({ params }: { params: { id: string } }) {
 
       <EditDocumentModal
         isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        onOpenEditor={() => {}} // Already in editor
+        onClose={() => setIsEditModalOpen(false)}// Already in editor
         document={currentDoc}
         onSave={handleSaveMetadata}
       />

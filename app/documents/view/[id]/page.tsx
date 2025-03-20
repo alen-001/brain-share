@@ -5,68 +5,71 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Edit } from "lucide-react"
 import Link from "next/link"
-import EditDocumentModal from "@/components/edit-document-modal"
 import { Badge } from "@/components/ui/badge"
-import { useToast } from "@/hooks/use-toast"
+import {toast} from "sonner"
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
-// Mock data for documents - expanded with description and tags
-const documents = [
-  {
-    id: "1",
-    title: "Project Proposal",
-    updatedAt: "2023-11-10T14:30:00Z",
-    content:
-      "<h2>Project Proposal</h2><p>This is a detailed project proposal for our new initiative.</p><p>The project aims to revolutionize how we approach document management by introducing a seamless, intuitive interface that makes creating and editing documents a breeze.</p><h3>Key Features</h3><ul><li>Real-time collaboration</li><li>Version history</li><li>Smart formatting</li><li>Cloud synchronization</li></ul><p>By implementing these features, we expect to see a 30% increase in team productivity and a significant reduction in document-related confusion.</p>",
-    description: "A comprehensive proposal for our new project initiative",
-    tags: ["project", "planning", "proposal"],
-  },
-  {
-    id: "2",
-    title: "Meeting Notes",
-    updatedAt: "2023-11-09T10:15:00Z",
-    content:
-      "<h2>Team Meeting Notes</h2><p>Notes from our weekly team meeting discussing project progress.</p><h3>Attendees</h3><ul><li>John Smith</li><li>Sarah Johnson</li><li>Michael Brown</li><li>Emily Davis</li></ul><h3>Discussion Points</h3><ol><li>Project timeline review</li><li>Budget allocation</li><li>Resource distribution</li><li>Next steps</li></ol><p>The team agreed to accelerate the development phase to meet the upcoming deadline. Additional resources will be allocated to the frontend team.</p>",
-    description: "Notes from our weekly team meeting on project progress",
-    tags: ["meeting", "notes", "team"],
-  },
-  {
-    id: "3",
-    title: "Research Findings",
-    updatedAt: "2023-11-08T16:45:00Z",
-    content:
-      "<h2>Research Findings</h2><p>Our research findings show interesting patterns in user behavior.</p><p>After analyzing data from over 1,000 users, we've identified several key insights that will inform our product development strategy.</p><h3>Key Insights</h3><ul><li>Users spend an average of 15 minutes per session</li><li>The most used feature is document sharing</li><li>Mobile usage has increased by 45% since last quarter</li><li>User retention is highest among those who use tags</li></ul><p>These findings suggest we should focus on enhancing our mobile experience and expanding our tagging system to improve user engagement.</p>",
-    description: "Analysis of recent user behavior patterns and insights",
-    tags: ["research", "analysis", "data"],
-  },
-]
-
+import axios from "axios"
+import { DocType, transformFetchedDoc } from "@/doc.types"
+import { useAuth } from "@clerk/nextjs"
 export default function DocumentViewPage({ params }:{params : Promise<{id: string}>}) {
   const router = useRouter()
-  const { toast } = useToast()
-  const [document, setDocument] = useState<any>(null)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [document, setDocument] = useState<DocType>()
+  const [Loading, setLoading] = useState(true);
   const {id}=use(params)
-  useEffect(() => {
-    const doc = documents.find((doc) => doc.id ===  id)
-    if (doc) {
-      setDocument(doc)
-    } else {
-      // Document not found, redirect to home
-      router.push("/")
+  const {getToken}=useAuth()
+  async function getDoc(){
+    try{
+      const token = await getToken();
+      setLoading(true);
+      const res = await axios.get(`/api/documents/${id}`,{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const data=res.data;
+      return transformFetchedDoc(data);
+    }catch(err){
+      console.error(err);
+      toast.error("Error fetching document",{
+        description: "An error occurred while fetching the document. Please try again later.",})
     }
-  }, [id, router])
-
-  const handleSaveMetadata = (updatedDoc: any) => {
-    // In a real app, this would update the backend
-    setDocument({
-      ...document,
-      title: updatedDoc.title,
-      description: updatedDoc.description,
-      tags: updatedDoc.tags,
-    })
   }
 
+  useEffect( ()=>{
+    getDoc().then((data)=>{
+      if (data) {
+        setLoading(false);
+        setDocument(data);
+      } else {
+        toast.error("Document not found", {
+          description: "The document you are looking for does not exist.",
+        });
+        router.push("/home");
+      }
+    })
+  },[id])
+  const handleShare =async () => {
+    try{
+      const token=await getToken();
+      const res=await axios.get(`/api/documents/${id}/share`,{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const data=res.data;
+      const shareId=data.shareId;
+      navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/documents/view/shared/${shareId}`)
+      toast.success("Share link copied",{
+        description: "Document share link has been copied to clipboard."
+      })
+    }catch(err){
+      console.error(err);
+      toast.error("Error sharing document",{
+        description: "An error occurred while sharing the document. Please try again later."
+      })
+    }
+  }
   const handleOpenEditor = () => {
     router.push(`/documents/${id}`)
   }
@@ -83,10 +86,12 @@ export default function DocumentViewPage({ params }:{params : Promise<{id: strin
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
-        <Button variant="outline" onClick={() => setIsEditModalOpen(true)}>
+        <Link href={`/documents/${id}`}>
+        <Button variant="outline">
           <Edit className="mr-2 h-4 w-4" />
           Edit
         </Button>
+        </Link>
       </div>
 
       <article className="max-w-3xl mx-auto">
@@ -112,18 +117,11 @@ export default function DocumentViewPage({ params }:{params : Promise<{id: strin
 
         <div className="prose max-w-none text-white" >
             {
-                parse(document.content)
+              parse(DOMPurify.sanitize(document.content))
             }
         </div>
       </article>
 
-      <EditDocumentModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        onOpenEditor={handleOpenEditor}
-        document={document}
-        onSave={handleSaveMetadata}
-      />
     </div>
   )
 }

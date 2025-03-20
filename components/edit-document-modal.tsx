@@ -26,12 +26,11 @@ import { useAuth } from "@clerk/nextjs"
 interface EditDocumentModalProps {
   isOpen: boolean
   onClose?: () => void
-  onOpenEditor: () => void
   document: DocType
   onSave: (document: Partial<DocType>) => void
 }
 
-export default function EditDocumentModal({ isOpen, onClose, onOpenEditor, document, onSave }: EditDocumentModalProps) {
+export default function EditDocumentModal({ isOpen, onClose, document, onSave }: EditDocumentModalProps) {
   console.log("Hello from modal",document);
   const [description, setDescription] = useState(document.description || "")
   const [tags, setTags] = useState<string[]>(document.tags || [])
@@ -129,9 +128,9 @@ export default function EditDocumentModal({ isOpen, onClose, onOpenEditor, docum
           </div>
         </div>
         <DialogFooter className="flex justify-between sm:justify-between">
-          <Button variant="outline" onClick={onOpenEditor}>
+          {/* <Button variant="outline" onClick={onOpenEditor}>
             Open Editor
-          </Button>
+          </Button> */}
           <Button onClick={handleSave}>Save Changes</Button>
         </DialogFooter>
       </DialogContent>

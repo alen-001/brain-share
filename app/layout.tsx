@@ -22,17 +22,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
       {/* <QueryClientProvider client={queryClient}> */}
-      <ClerkProvider
-      appearance={{
-        baseTheme:dark,
-        variables:{
-          fontSize: '16px',
-          fontFamily: 'Inter, sans-serif',
-          
-        }
-      }
-      }
-    >
       <DocumentProvider>
       <ThemeProvider
     attribute="class"
@@ -40,10 +29,20 @@ export default function RootLayout({
     enableSystem
     disableTransitionOnChange
   >
+          <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        // variables:{
+        //   colorPrimary: 'hsl(263.4, 70%, 50.4%)'
+          
+        // }
+      }
+      }
+    >
         {children}
+        </ClerkProvider>
         </ThemeProvider>
         </DocumentProvider>
-        </ClerkProvider>
         <Toaster />
         {/* </QueryClientProvider> */}
       </body>

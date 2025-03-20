@@ -17,7 +17,7 @@ Brain Share is a powerful knowledge management platform that enables users to ma
 ✅ **Rich Text Document Management:**  
 Leverage TipTap's rich text editor to create, format, and maintain documents efficiently.
 
-✅ **Tagging and Organization:**  
+✅ **Tagging and Search:**  
 Add tags to documents to enable easy categorization and filtering.
 
 ✅ **Full CRUD Operations:**  
@@ -38,9 +38,8 @@ Seamless authentication and session management powered by Clerk.
 🚧 **1. Editor Access and Real-Time Collaboration**  
 - Implement collaborative document editing using **Liveblocks** to enable multiple users to work on the same document in real-time.
 
-🧠 **2. AI Autocomplete and Enhanced AI Features**  
-- Add AI-powered autocomplete and other intelligent features to enhance the document creation and editing experience.
-
+🧠 **2. Vector database integration for semantic querying and RAG applications**  
+- Encorporate vector databases like pgvector/weaviate allowing users to query the knowledge base semantically
 ---
 
 ### 📚 Setup Instructions
@@ -62,7 +61,7 @@ npm install
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
 CLERK_SECRET_KEY=<your-clerk-secret-key>
 MONGODB_URI=<your-mongodb-uri>
-NEXT_API_BASE_URL=<your-api-base-url>
+NEXT_PUBLIC_BASE_URL=<your-api-base-url>
 
 ```
 
@@ -79,8 +78,6 @@ http://localhost:3000
 ---
 ### Todos
 - [ ]  Migrate authentication from clerk to next-auth for in house user management
----
 
-### 🤝 Contributing
-Contributions are welcome! If you encounter issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
+
 
