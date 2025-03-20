@@ -6,7 +6,10 @@ if (!MONGODB_URI) throw new Error("MONGODB_URI is missing in .env");
 
 export const connectDB = async () => {
     try{
-        mongoose.connect(MONGODB_URI);
+        if (mongoose.connection.readyState >= 1) {
+            return;
+          }
+       await mongoose.connect(MONGODB_URI);
         const connection=mongoose.connection;
         connection.on('connected',()=>{
             console.log("Connected to the database");

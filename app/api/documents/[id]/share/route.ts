@@ -3,7 +3,7 @@ import {connectDB} from "@/lib/db";
 import Doc from "@/models/doc.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req:NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req:NextRequest, { params }: { params: { id: string } }) {
 //   const { userId } =await auth();
 //   if (!userId) {
 //     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -18,7 +18,7 @@ export async function POST(req:NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ message: "Document not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ shareLink: `${process.env.NEXT_PUBLIC_BASE_URL}/share/${doc.shareId}` }, { status: 200 });
+    return NextResponse.json({ shareLink: `${process.env.NEXT_API_BASE_URL}/share/${doc.shareId}` }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: "Error generating share link" }, { status: 500 });
   }

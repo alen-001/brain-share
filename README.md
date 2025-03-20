@@ -5,17 +5,14 @@ Brain Share is a powerful knowledge management platform that enables users to ma
 ---
 
 ### 🚀 Tech Stack
+
 - **Frontend:** Next.js 15, TypeScript, Tailwind CSS  
 - **Database:** MongoDB  
 - **Authentication:** Clerk  
 - **Editor:** TipTap (Rich Text Editor)  
-
 ---
 
 ### 🎯 Key Features
-
-✅ **Authentication with Clerk:**  
-Seamless authentication and session management powered by Clerk.
 
 ✅ **Rich Text Document Management:**  
 Leverage TipTap's rich text editor to create, format, and maintain documents efficiently.
@@ -23,15 +20,16 @@ Leverage TipTap's rich text editor to create, format, and maintain documents eff
 ✅ **Tagging and Organization:**  
 Add tags to documents to enable easy categorization and filtering.
 
-✅ **Search and Filter by Tag:**  
-Quickly search and filter documents using tags or full-text search.
-
 ✅ **Full CRUD Operations:**  
 - Create, view, update, and delete documents effortlessly.  
 - Maintain a seamless workflow with intuitive UI/UX.
 
 ✅ **Anonymous Document Sharing:**  
 Easily share documents with view-only access via unique links.
+
+✅ **Authentication and Authorization**  
+Seamless authentication and session management powered by Clerk.
+
 
 ---
 
@@ -64,7 +62,7 @@ npm install
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
 CLERK_SECRET_KEY=<your-clerk-secret-key>
 MONGODB_URI=<your-mongodb-uri>
-NEXT_PUBLIC_BASE_URL=<your-base-url>
+NEXT_API_BASE_URL=<your-api-base-url>
 
 ```
 
@@ -78,6 +76,9 @@ npm run dev
 http://localhost:3000
 ```
 
+---
+### Todos
+- [ ]  Migrate authentication from clerk to next-auth for in house user management
 ---
 
 ### 🤝 Contributing
