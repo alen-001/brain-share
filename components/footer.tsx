@@ -1,5 +1,6 @@
 import React from "react";
 import {LinkedInLogoIcon, GitHubLogoIcon} from "@radix-ui/react-icons"
+import Link from "next/link";
 
 
 
@@ -25,7 +26,9 @@ const FooterThird = ({
           </div> */}
           {/* Social Icons */}
           <div className="mt-5 text-center font-thin text-sm text-neutral-400">
+          <Link href="/home">
           <p>Get Started Today!</p>
+          </Link>
         </div>
           <div className="flex flex-wrap ml-auto justify-center space-x-4 text-white-700">
             {socialLinks.map((social) => (

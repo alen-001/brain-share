@@ -10,6 +10,7 @@ import parse from "html-react-parser";
 import DOMPurify from "dompurify";
 import axios from "axios"
 import { DocType, transformFetchedDoc } from "@/doc.types"
+import Loader from "@/components/loader"
 export default function SharedDocumentViewPage({ params }:{params : Promise<{shareId: string}>}) {
   const router = useRouter()
   const [document, setDocument] = useState<DocType>()
@@ -39,7 +40,7 @@ export default function SharedDocumentViewPage({ params }:{params : Promise<{sha
     })
   },[shareId])
   if (!document) {
-    return <div className="container mx-auto py-10">Loading...</div>
+    return <Loader/>
   }
 
   return (

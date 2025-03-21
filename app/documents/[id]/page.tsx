@@ -12,6 +12,7 @@ import EditDocumentModal from "@/components/edit-document-modal"
 import { DocType, transformFetchedDoc } from "@/doc.types"
 import { useAuth } from "@clerk/nextjs"
 import axios from "axios"
+import Loader from "@/components/loader"
 
 export default function DocumentPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
@@ -20,10 +21,12 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
   const [currentDoc, setCurrentDoc] = useState<DocType>({id:"",title:"",updatedAt:"",content:"",description:"",tags:[]});
   const [content, setContent] = useState("")
   const [isSaving, setIsSaving] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const id=use(params).id;
   async function getDoc(){
     try{
+      setIsLoading(true)
       const token = await getToken();
       const res = await axios.get(`/api/documents/${id}`,{
         headers:{
@@ -42,6 +45,7 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
   useEffect( ()=>{
     getDoc().then((data)=>{
       if (data) {
+        setIsLoading(false)
         setCurrentDoc(data);
         setContent(data.content);
       } else {
@@ -83,7 +87,9 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
       setCurrentDoc((prev) => ({ ...prev, ...updatedDoc }));
       setIsEditModalOpen(false);
     };
-    
+  if(isLoading){
+    return <Loader/>
+  }
   const handleSave = () => {
     if (!currentDoc.title.trim()) {
       toast.error("Title required",{
@@ -148,15 +154,15 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
           </Button>
           <Button variant="outline" onClick={handleShare} >
             <Share className="mr-2 h-4 w-4" />
-            Share
+            <div className="hidden lg:block">Share</div>
           </Button>
-          <Button onClick={handleSave} disabled={isSaving}>
+          <Button onClick={handleSave} className="flex items-center justify-center" disabled={isSaving}>
             {isSaving ? (
               "Saving..."
             ) : (
               <>
                 <Save className="mr-2 h-4 w-4" />
-                Save
+                <div className="hidden lg:block">Save</div>
               </>
             )}
           </Button>

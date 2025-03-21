@@ -13,6 +13,7 @@ import axios from "axios"
 import { DocType, transformFetchedDoc } from "@/doc.types"
 import { useAuth } from "@clerk/nextjs"
 import { Share } from "lucide-react"
+import Loader from "../../../../components/loader"
 export default function DocumentViewPage({ params }:{params : Promise<{id: string}>}) {
   const router = useRouter()
   const [document, setDocument] = useState<DocType>()
@@ -70,7 +71,7 @@ export default function DocumentViewPage({ params }:{params : Promise<{id: strin
   }
 
   if (!document) {
-    return <div className="container mx-auto py-10">Loading...</div>
+    return <Loader/>
   }
 
   return (
