@@ -131,7 +131,7 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
   }
 
   return (
-    <div className="container mx-auto max-2xl:px-4 py-6 overflow-hidden">
+    <div className="container mx-auto max-2xl:px-4 py-6">
       <div className="flex  items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <Link href="/home">
