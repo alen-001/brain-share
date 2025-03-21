@@ -61,7 +61,7 @@ npm install
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
 CLERK_SECRET_KEY=<your-clerk-secret-key>
 MONGODB_URI=<your-mongodb-uri>
-NEXT_PUBLIC_BASE_URL=<your-api-base-url>
+NEXT_PUBLIC_BASE_URL=<your-public-base-url>
 NEXT_PUBLIC_CLERK_SIGN_IN_URL='/sign-in'
 NEXT_PUBLIC_CLERK_SIGN_UP_URL='/sign-up'
 NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL='/home'

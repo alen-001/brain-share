@@ -3,7 +3,7 @@ import React from 'react'
 
 const SignUpPage = () => {
   return (
-    <main className='auth-page'>
+    <main className='auth-page w-screen h-screen flex justify-center items-center bg-[#1e1b22]'>
         <SignUp/>
     </main>
   )
