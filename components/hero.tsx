@@ -22,7 +22,7 @@ export function Hero() {
         fill="white"
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl p-4 pt-20 md:pt-40 sm:pt-60 ">
+      <div className="relative z-10 mx-auto w-full max-w-7xl p-4 pt-20 md:pt-40 sm:pt-60 max-sm:pt-80 ">
         <h1 className="bg-opacity-50 bg-gradient-to-b font-mono from-neutral-50 to-neutral-400 bg-clip-text text-center text-5xl font-extralight text-transparent md:text-7xl">
         Never let an idea slip away
         </h1>

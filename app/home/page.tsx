@@ -5,7 +5,7 @@ import DocumentsPage from "@/components/document-page"
 import Link from "next/link"
 export default function Home() {
   return (
-    <div className="container mx-auto md:px-2 sm:px-2 py-10">
+    <div className="container mx-auto max-2xl:px-4 py-10">
       <SignedOut>
       <RedirectToSignIn/>
       </SignedOut>

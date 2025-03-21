@@ -17,7 +17,7 @@ function LandingPage() {
       ease: "easeInOut",
     }}
   >
-        <div className=" flex flex-col items-center justify-center">
+        <div className=" flex flex-col items-center justify-center overflow-hidden">
           {/* <Hero/> */}
           <Hero/>
           <div className="mt-20">

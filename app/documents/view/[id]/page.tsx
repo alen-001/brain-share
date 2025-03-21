@@ -75,7 +75,7 @@ export default function DocumentViewPage({ params }:{params : Promise<{id: strin
   }
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="container mx-auto px-4 py-6">
       <div className="flex items-center justify-between mb-6">
         <Link href="/home">
           <Button variant="outline" size="icon">
@@ -85,13 +85,13 @@ export default function DocumentViewPage({ params }:{params : Promise<{id: strin
         <div className="flex gap-2">
         <Link href={`/documents/${id}`}>
         <Button variant="outline">
-          <Edit className="mr-2 h-4 w-4" />
-          Edit
+          <Edit className="lg:mr-2 h-4 w-4" />
+          <div className="max-lg:hidden">Edit</div>
         </Button>
         </Link>
         <Button variant="default" onClick={handleShare} >
-          <Share className="mr-2 h-4 w-4" />
-          Share
+          <Share className="lg:mr-2 h-4 w-4" />
+          <div className="max-lg:hidden">Share</div>
         </Button>
         </div>
       </div>

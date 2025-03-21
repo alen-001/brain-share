@@ -153,16 +153,16 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
             Edit Metadata
           </Button>
           <Button variant="outline" onClick={handleShare} >
-            <Share className="mr-2 h-4 w-4" />
-            <div className="hidden lg:block">Share</div>
+            <Share className="lg:mr-2 h-4 w-4" />
+            <div className="max-lg:hidden">Share</div>
           </Button>
           <Button onClick={handleSave} className="flex items-center justify-center" disabled={isSaving}>
             {isSaving ? (
               "Saving..."
             ) : (
               <>
-                <Save className="mr-2 h-4 w-4" />
-                <div className="hidden lg:block">Save</div>
+                <Save className="lg:mr-2 h-4 w-4" />
+                <div className="max-lg:hidden">Save</div>
               </>
             )}
           </Button>
