@@ -131,8 +131,8 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
   }
 
   return (
-    <div className="container mx-auto py-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="container mx-auto max-2xl:px-4 py-6 overflow-hidden">
+      <div className="flex  items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <Link href="/home">
             <Button variant="outline" size="icon">
@@ -142,15 +142,15 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
           <Input
             type="text"
             placeholder="Document Title"
-            className="text-xl font-medium h-10 w-[300px] md:w-[400px]"
+            className="text-xl font-medium h-10 w-[300px] md:w-[400px] max-sm:w-[200px]"
             value={currentDoc.title}
             onChange={(e) => setCurrentDoc({...currentDoc,title:e.target.value})}
           />
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => setIsEditModalOpen(true)}>
-            <Edit className="mr-2 h-4 w-4" />
-            Edit Metadata
+            <Edit className="sm:mr-2 h-4 w-4" />
+            <div className="max-sm:hidden">Edit Metadata</div>
           </Button>
           <Button variant="outline" onClick={handleShare} >
             <Share className="lg:mr-2 h-4 w-4" />
