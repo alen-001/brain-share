@@ -131,9 +131,9 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
   }
 
   return (
-    <div className="container mx-auto max-2xl:px-4 py-6">
+    <div className="container mx-auto max-2xl:px-4 py-6 overflow-hidden">
       <div className="flex  items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 pr-2 flex-grow">
           <Link href="/home">
             <Button variant="outline" size="icon">
               <ArrowLeft className="h-4 w-4" />
@@ -142,7 +142,7 @@ export default function DocumentPage({ params }: { params: Promise<{ id: string 
           <Input
             type="text"
             placeholder="Document Title"
-            className="text-xl font-medium h-10 w-[300px] md:w-[400px] max-sm:w-[200px]"
+            className=" font-medium h-10 flex-grow"
             value={currentDoc.title}
             onChange={(e) => setCurrentDoc({...currentDoc,title:e.target.value})}
           />
