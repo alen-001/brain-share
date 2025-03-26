@@ -21,6 +21,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
+import useDebounce from "@/hooks/useDebounce";
 export default function DocumentsList({ docs }: { docs: DocType[] }) {
   const router=useRouter();
   const [documents, setDocuments] = useState<DocType[]>(docs);
@@ -50,6 +51,7 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
       router.push(`/documents/${newDoc.id}`);
     }
   };
+  const handleCreateDebounced=useDebounce(handleCreate,1500)
   const deleteDocument = () => {
     if (documentToDelete) {
       handleDelete(documentToDelete)
@@ -102,10 +104,11 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
         })
       }
     }
+  const handleShareDebounced=useDebounce(handleShare,1500);
   const shareDocument = (id: string, e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    handleShare(id);
+    handleShareDebounced(id);
 
   }
   return (
@@ -182,7 +185,7 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
             </Card>
           ))}
           <Card className="flex items-center justify-center">
-            <Button onClick={handleCreate}>
+            <Button onClick={handleCreateDebounced}>
             <PlusCircle className="mr-2 h-4 w-4" />
             Add new Document
           </Button>
