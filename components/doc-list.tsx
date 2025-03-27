@@ -24,6 +24,8 @@ import axios from "axios";
 import useDebounce from "@/hooks/useDebounce";
 export default function DocumentsList({ docs }: { docs: DocType[] }) {
   const router=useRouter();
+  const [isCreating,setisCreating]=useState(false);
+  const [isSharing,setisSharing]=useState(false);
   const [documents, setDocuments] = useState<DocType[]>(docs);
   const [searchQuery, setSearchQuery] = useState("");
   const [documentToDelete, setDocumentToDelete] = useState<string | null>(null)
@@ -38,6 +40,7 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
   // Create a new document
   const {getToken}=useAuth();
   const handleCreate = async () => {
+    setisCreating(true);
     const res = await fetch("/api/documents", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -47,11 +50,11 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
       const data = await res.json();
       const newDoc=transformFetchedDoc(data);
       setDocuments((prevDocs) => [...prevDocs, newDoc]);
-
+      setisCreating(false);
+      toast.success("Document created successfully!");
       router.push(`/documents/${newDoc.id}`);
     }
   };
-  const handleCreateDebounced=useDebounce(handleCreate,1500)
   const deleteDocument = () => {
     if (documentToDelete) {
       handleDelete(documentToDelete)
@@ -85,6 +88,7 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
   //share 
     const handleShare =async (id:string) => {
       try{
+        setisSharing(true);
         const token=await getToken();
         const res=await axios.get(`/api/documents/${id}/share`,{
           headers:{
@@ -94,6 +98,7 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
         const data=res.data;
         const shareId=data.shareId;
         navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/documents/view/shared/${shareId}`)
+        setisSharing(false);
         toast.success("Share link copied",{
           description: "Document share link has been copied to clipboard."
         })
@@ -104,11 +109,10 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
         })
       }
     }
-  const handleShareDebounced=useDebounce(handleShare,1500);
   const shareDocument = (id: string, e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    handleShareDebounced(id);
+    handleShare(id);
 
   }
   return (
@@ -178,16 +182,16 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
-                  <Button variant="outline" size="icon" className='hover:text-green-300'onClick={(e) => shareDocument(doc.id, e)}>
+                  <Button variant="outline" size="icon" className='hover:text-green-300'onClick={(e) => shareDocument(doc.id, e)} disabled={isSharing}>
                     <Share className="h-4 w-4" />
                   </Button>
                 </CardFooter>
             </Card>
           ))}
           <Card className="flex items-center justify-center">
-            <Button onClick={handleCreateDebounced}>
+            <Button onClick={handleCreate} disabled={isCreating}>
             <PlusCircle className="mr-2 h-4 w-4" />
-            Add new Document
+            {isCreating?<>Creating...</>:<>Add new Document</>}
           </Button>
           </Card>
         </div>

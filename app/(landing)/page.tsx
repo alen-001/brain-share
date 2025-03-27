@@ -6,7 +6,7 @@ import Image from 'next/image';
 import {motion} from 'motion/react';
 function LandingPage() {
   return (
-    <div className='w-screen bg-black'>
+    <div className='w-screen bg-black overflow-clip'>
         <div className='sticky top-0 z-50'><LandingNav></LandingNav></div>
         <motion.div
     initial={{ opacity: 0.0, y: 40 }}
