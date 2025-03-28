@@ -139,9 +139,9 @@ export default function DocumentsList({ docs }: { docs: DocType[] }) {
             {searchQuery ? "Try a different search term" : "Create your first document to get started"}
           </p>
           {!searchQuery && (
-              <Button className="mt-4" onClick={handleCreate}>
+              <Button className="mt-4" onClick={handleCreate} disabled={isCreating}>
                 <PlusCircle className="mr-2 h-4 w-4" />
-                New Document
+                {isCreating?<>Creating...</>:<>New Document</>}
               </Button>
           )}
         </div>
